@@ -1,30 +1,24 @@
 #include <iostream>
-#include <iterator>
+#include <vector>
 
 using namespace std;
+
+int WIDTH = 12;
+int HEIGHT = 8;
 
 enum State { empty, blue, red };
 
 class Board {
   public:
-    Board();
+    Board(int width, int height) : board(width, vector<State>(height, State::empty)) {}
     void print_board();
     void add_on_row(int row, State state);
     State check_for_win();
 
   private:
-    State board [12][8];
-    template <size_t N1>
-    State check_array(State (&arr)[N1]);
+    vector<vector<State>> board;
+    State check_vector(vector<State>);
 };
-
-Board::Board() {
-    for (int i=0; i<12; i++) {
-        for (int j=0; j<8; j++) {
-            board[i][j] = State::empty;
-        };
-    };
-}
 
 void Board::print_board() {
     for (int i=0; i<8; i++) {
@@ -51,10 +45,8 @@ void Board::add_on_row(int row, State state) {
     }
 }
 
-// I have the feeling this can be written better
-template <size_t N1>
-State Board::check_array(State (&arr)[N1]) {
-    for ()
+State Board::check_vector(vector<State>) {
+
 }
 
 State Board::check_for_win() {
@@ -78,7 +70,7 @@ Board game_loop(Board board) {
 }
 
 int main() {
-    Board board;
+    Board board(WIDTH, HEIGHT);
     while (true) {
         board = game_loop(board);
     }
