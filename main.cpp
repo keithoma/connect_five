@@ -9,6 +9,7 @@ class Board {
     Board();
     void print_board();
     void add_on_row(int row, State state);
+    bool check_for_win();
   private:
     State board [12][8];
 };
@@ -20,6 +21,7 @@ Board::Board() {
         };
     };
 }
+
 void Board::print_board() {
     for (int i=0; i<8; i++) {
         for (int j=0; j<12; j++) {
@@ -30,7 +32,7 @@ void Board::print_board() {
             } else {
                 cout << "Y";
             }
-            cout << " ";
+            cout << "   ";
         }
         cout << "\n";
     }
@@ -45,24 +47,29 @@ void Board::add_on_row(int row, State state) {
     }
 }
 
+bool Board::check_for_win() {
+    
+}
+
 Board game_loop(Board board) {
-    board.print_board();
-    cout << "\n";
-    cout << "It's blue player's turn. On which row do you want to put a stone?";
     int row;
-    cin >> row;
-    board.add_on_row(row, State::blue);
+
     board.print_board();
     cout << "\n";
-    cout << "It's red player's turn. On which row do you want to put a stone?";
+    cout << "It's blue player's turn. On which row do you want to put a stone?\n>>";
     cin >> row;
-    board.add_on_row(row, State::red);
+    board.add_on_row(row - 1, State::blue);
+    board.print_board();
+    cout << "\n";
+    cout << "It's red player's turn. On which row do you want to put a stone?\n>>";
+    cin >> row;
+    board.add_on_row(row - 1, State::red);
     return board;
 }
 
 int main() {
-    Board obj;
+    Board board;
     while (true) {
-        obj = game_loop(obj);
+        board = game_loop(board);
     }
 }
