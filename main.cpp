@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iterator>
 
 using namespace std;
 
@@ -9,9 +10,12 @@ class Board {
     Board();
     void print_board();
     void add_on_row(int row, State state);
-    bool check_for_win();
+    State check_for_win();
+
   private:
     State board [12][8];
+    template <size_t N1>
+    State check_array(State (&arr)[N1]);
 };
 
 Board::Board() {
@@ -47,7 +51,13 @@ void Board::add_on_row(int row, State state) {
     }
 }
 
-bool Board::check_for_win() {
+// I have the feeling this can be written better
+template <size_t N1>
+State Board::check_array(State (&arr)[N1]) {
+    for ()
+}
+
+State Board::check_for_win() {
     
 }
 
