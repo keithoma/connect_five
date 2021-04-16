@@ -18,6 +18,7 @@ class Board {
   private:
     vector<vector<State>> board;
     State check_vector(vector<State>);
+    vector<vector<State>> transpose();
 };
 
 void Board::print_board() {
@@ -45,12 +46,50 @@ void Board::add_on_row(int row, State state) {
     }
 }
 
-State Board::check_vector(vector<State>) {
+// should use negative numbers instead of two ints
+State Board::check_vector(vector<State> vec) {
+    int points_blue = 0;
+    int points_red  = 0;
+    for (State state : vec) {
+        if (state == State::blue) {
+            points_blue++;
+            points_red = 0;
+        } else if (state == State::red) {
+            points_red++;
+            points_blue = 0;
+        } else {
+            points_blue = 0;
+            points_red = 0;
+        }
 
+        if (points_blue == 5) {
+            return State::blue;
+        } else if (points_red == 5) {
+            return State::red;
+        }
+    }
+    return State::empty;
 }
 
+// this should only give me a reference? pointer? but not create a new board.
+vector<vector<State>> Board::transpose() {
+    vector<vector<State>> trans (HEIGHT, vector<State>(WIDTH, State::empty));
+}
+
+outtrans(out[0].size(),
+                                    vector<double>(out.size()));
+    for (size_t i = 0; i < out.size(); ++i)
+        for (size_t j = 0; j < out[0].size(); ++j)
+            outtrans[j][i] = out[i][j];
+
 State Board::check_for_win() {
-    
+    for (vector<State> column : board) {
+        State win = check_vector(column);
+        switch (win) {
+            case State::blue : return State::blue;
+            case State::red : return State::red;
+        }
+    }
 }
 
 Board game_loop(Board board) {
