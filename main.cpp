@@ -10,11 +10,14 @@ enum State { empty, blue, red };
 
 class Board {
   public:
+    vector<vector<State>> board; // board[width][height]
+                                 // board[column][row]
+
     Board(unsigned short int _width, unsigned short int _height)
         : 
           width { _width },
           height { _height },
-          board { (width, vector<State>(height, State::empty)) }
+          board { vector<vector<State>>(_width, vector<State>(_height, State::empty)) }
         {
         }
     void print_board();
@@ -24,21 +27,25 @@ class Board {
   private:
     unsigned short int width;
     unsigned short int height;
-    vector<vector<State>> board;
+
 
     State check_vector(vector<State>);
     vector<vector<State>> transpose();
 };
 
 void Board::print_board() {
-    for (int i = 0; i < width; ++i) {
-        for (int j = 0; j < height; ++j) {
-            if (board[j][i] == State::empty) {
-                cout << "O";
-            } else if (board[j][i] == State::blue) {
-                cout << "X";
-            } else {
-                cout << "Y";
+    for (int row = 0; row < height; ++row) {
+        for (int column = 0; column < width; ++column) {
+            switch (board[row][column]) {
+                case State::blue:
+                    cout << "X";
+                    break;
+                case State::red:
+                    cout << "Y";
+                    break;
+                default:
+                    cout << "O";
+                    break;
             }
             cout << "   ";
         }
@@ -46,10 +53,10 @@ void Board::print_board() {
     }
 }
 
-void Board::add_on_row(int row, State state) {
-    for (int i=7; i>=0; i--) {
-        if (board[row][i] == State::empty) {
-            board[row][i] = state;
+void Board::add_on_row(int _column, State _state) {
+    for (int row = height - 1; row >= 0; --row) {
+        if (board[row][_column] == State::empty) {
+            board[row][_column] = _state;
             break;
         }
     }
@@ -102,17 +109,16 @@ State Board::check_for_win() {
 Board game_loop(Board board) {
     int row;
 
-    cout << "Hi";
     board.print_board();
     cout << "\n";
     cout << "It's blue player's turn. On which row do you want to put a stone?\n>>";
     cin >> row;
-    // board.add_on_row(row - 1, State::blue);
-    // board.print_board();
+    board.add_on_row(row - 1, State::blue);
+    board.print_board();
     cout << "\n";
     cout << "It's red player's turn. On which row do you want to put a stone?\n>>";
     cin >> row;
-    // board.add_on_row(row - 1, State::red);
+    board.add_on_row(row - 1, State::red);
     return board;
 }
 
