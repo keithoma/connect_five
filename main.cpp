@@ -3,27 +3,36 @@
 
 using namespace std;
 
-int WIDTH = 12;
-int HEIGHT = 8;
+const unsigned short int BOARD_WIDTH = 12;
+const unsigned short int BOARD_HEIGHT = 8;
 
 enum State { empty, blue, red };
 
 class Board {
   public:
-    Board(int width, int height) : board(width, vector<State>(height, State::empty)) {}
+    Board(unsigned short int _width, unsigned short int _height)
+        : 
+          width { _width },
+          height { _height },
+          board { (width, vector<State>(height, State::empty)) }
+        {
+        }
     void print_board();
     void add_on_row(int row, State state);
     State check_for_win();
 
   private:
+    unsigned short int width;
+    unsigned short int height;
     vector<vector<State>> board;
+
     State check_vector(vector<State>);
     vector<vector<State>> transpose();
 };
 
 void Board::print_board() {
-    for (int i=0; i<8; i++) {
-        for (int j=0; j<12; j++) {
+    for (int i = 0; i < width; ++i) {
+        for (int j = 0; j < height; ++j) {
             if (board[j][i] == State::empty) {
                 cout << "O";
             } else if (board[j][i] == State::blue) {
@@ -73,14 +82,12 @@ State Board::check_vector(vector<State> vec) {
 
 // this should only give me a reference? pointer? but not create a new board.
 vector<vector<State>> Board::transpose() {
-    vector<vector<State>> trans (HEIGHT, vector<State>(WIDTH, State::empty));
+    vector<vector<State>> trans (height, vector<State>(width, State::empty));
+    for (int i = 0; i < width; ++i)
+        for (int j = 0; j < height; ++j)
+            trans[j][i] = board[i][j];
+    return trans;
 }
-
-outtrans(out[0].size(),
-                                    vector<double>(out.size()));
-    for (size_t i = 0; i < out.size(); ++i)
-        for (size_t j = 0; j < out[0].size(); ++j)
-            outtrans[j][i] = out[i][j];
 
 State Board::check_for_win() {
     for (vector<State> column : board) {
@@ -95,22 +102,24 @@ State Board::check_for_win() {
 Board game_loop(Board board) {
     int row;
 
+    cout << "Hi";
     board.print_board();
     cout << "\n";
     cout << "It's blue player's turn. On which row do you want to put a stone?\n>>";
     cin >> row;
-    board.add_on_row(row - 1, State::blue);
-    board.print_board();
+    // board.add_on_row(row - 1, State::blue);
+    // board.print_board();
     cout << "\n";
     cout << "It's red player's turn. On which row do you want to put a stone?\n>>";
     cin >> row;
-    board.add_on_row(row - 1, State::red);
+    // board.add_on_row(row - 1, State::red);
     return board;
 }
 
 int main() {
-    Board board(WIDTH, HEIGHT);
+    Board board(BOARD_WIDTH, BOARD_HEIGHT);
     while (true) {
         board = game_loop(board);
     }
+    return 0;
 }
