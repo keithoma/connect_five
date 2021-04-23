@@ -25,9 +25,6 @@ class Board {
         }
 
     void print_board();
-    void clear_and_print();
-    tuple<int, int, State> add_on_row(int _column, State _state);
-    void drop_animation(int _column, State _state);
     State check_for_win();
 
     void add_and_animate(int _column, State _state);
@@ -36,7 +33,6 @@ class Board {
     unsigned short int width;
     unsigned short int height;
 
-    void animate_drop(tuple<int, int, State> _tuple);
     State check_vector(vector<State>);
     vector<vector<State>> transpose();
 };
@@ -79,43 +75,18 @@ void Board::print_board() {
     cout << "\n\n\n";
 }
 
-/*
-tuple<int, int, State> Board::add_on_row(int _column, State _state) {
-    for (int row = height - 1; row >= 0; --row) {
+void Board::add_and_animate(int _column, State _state) {
+    for (int row = 0; row < height; ++row) {
         if (board[row][_column] == State::empty) {
             board[row][_column] = _state;
-            return { row, _column, _state };
+            if (row >= 1) {
+                board[row - 1][_column] = State::empty;
+            }
+        } else {
+            break;
         }
-    }
-}
-
-void Board::animate_drop(tuple<int, int, State> _tuple) {
-    for (int row = 0; row < get<0>(_tuple); ++row) {
-        usleep(300000); // 1 sec = 1000000
-        board[row][get<1>(_tuple)] = get<2>(_tuple);
         print_board();
-    }
-}
-
-void Board::add_and_animate(int _column, State _state) {
-    animate_drop(add_on_row(_column, _state));
-}
-*/
-
-void Board::add_and_animate(int _column, State _state) {
-    if (board[0][_column] == State::empty) {
-        for (int row = 0; row < height; ++row) {
-            board[row][_column] == _state;
-            usleep(300000);
-            cout << "\033[2J\033[1;1H"; // clears screen
-            cout << "YYYYYYY";
-
-            print_board();
-            usleep(300000);
-            cout << "\033[2J\033[1;1H"; // clears screen
-            cout << "YYYYYYY";
-            usleep(300000);
-        }
+        usleep(300000); // 1 sec = 1000000
     }
 }
 
@@ -168,7 +139,7 @@ Board game_loop(Board board) {
 
     board.print_board();
     cout << "\n";
-    cout << "It's GREEN's player's turn. On which row do you want to put a stone?\n>>";
+    cout << "It's GREEN's player's turn. On which row do you want to put a stone?" << endl;
     cin >> row;
     board.add_and_animate(row - 1, State::blue);
     board.print_board();
