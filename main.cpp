@@ -6,8 +6,11 @@
 
 using namespace std;
 
-const unsigned short int BOARD_WIDTH = 12;
-const unsigned short int BOARD_HEIGHT = 8;
+
+// the dimension of the board is not working
+
+constexpr unsigned short int BOARD_WIDTH = 12;
+constexpr unsigned short int BOARD_HEIGHT = 8;
 
 enum State { empty, blue, red };
 
@@ -139,12 +142,12 @@ Board game_loop(Board board) {
 
     board.print_board();
     cout << "\n";
-    cout << "It's GREEN's player's turn. On which row do you want to put a stone?" << endl;
+    cout << "It's \x1b[32mGREEN\x1b[0m player's turn. On which row do you want to put a stone?" << endl;
     cin >> row;
     board.add_and_animate(row - 1, State::blue);
     board.print_board();
     cout << "\n";
-    cout << "It's red player's turn. On which row do you want to put a stone?\n>>";
+    cout << "It's \x1b[31mRED\x1b[0m player's turn. On which row do you want to put a stone?\n>>";
     cin >> row;
     board.add_and_animate(row - 1, State::red);
     return board;
