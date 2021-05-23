@@ -28,14 +28,14 @@ class Board {
         {
         }
 
-	State at(int _row, int _col) const
+	State at(int _col, int _row) const
 	{
-		return board.at(_row).at(_col);
+		return board.at(_col).at(_row);
 	}
 
-	void set(int _row, int _col, State _value)
+	void set(int _col, int _row, State _state)
 	{
-		board.at(_row).at(_col) = _value;
+		board.at(_col).at(_row) = _state;
 	}
 
     void print_board() const;
@@ -62,7 +62,7 @@ void Board::print_board() const {
     for (int row = 0; row < height; ++row) {
     cout << "            ";
         for (int column = 0; column < width; ++column) {
-            switch (board[row][column]) {
+            switch (board[column][row]) {
                 case State::green:
                     cout << "\x1b[32mX\x1b[0m";
                     break;
@@ -82,10 +82,10 @@ void Board::print_board() const {
 
 void Board::add_and_animate(int _column, State _state) {
     for (int row = 0; row < height; ++row) {
-        if (at(row, _column) == State::empty) {
-            set(row, _column, _state);
+        if (at(_column, row) == State::empty) {
+            set(_column, row, _state);
             if (row >= 1)
-				set(row - 1, _column, State::empty);;
+				set(_column, row - 1, State::empty);;
         } else {
             break;
         }
