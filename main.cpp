@@ -90,12 +90,12 @@ void Board::add_and_animate(int _column, State _state) {
             break;
         }
         print_board();
-        usleep(300000); // 1 sec = 1000000
+        usleep(100000); // 1 sec = 1000000
     }
 }
 
 State Board::check_for_win() const {
-
+	return State::empty;
 }
 
 enum class Player { green, red };
@@ -131,30 +131,18 @@ Board player_turn(Board board, Player _player) {
     return board;
 }
 
-Board game(Board const& _board)
-{
-	Board board = _board; // python: baord = copy(_board);
+Board game(Board const& _board) {
+	Board board = _board;
 	board.print_board();
 
-	Board const& bref = _board;
-	bref.print_board();
-
-	Board const* pref = &_board;
-	pref->print_board();
-
-
-	for (Player const player: {Player::green, Player::red})
-	{
+	for (Player const player: {Player::green, Player::red}) {
 		board = player_turn(board, player);
-		switch (board.check_for_win())
-		{
-			case State::empty:
-				return game(board);
-			default:
-				break;
+		if (board.check_for_win() != State::empty) {
+			return board;
 		}
+
 	}
-	return board;
+	return game(board);
 }
 
 int main()
