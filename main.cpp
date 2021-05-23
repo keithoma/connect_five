@@ -7,8 +7,8 @@
 
 using namespace std;
 
-
-// the dimension of the board is not working
+// after few rounds, out_of_bound error
+// i really don't know why and where
 
 constexpr unsigned short int BOARD_WIDTH = 12;
 constexpr unsigned short int BOARD_HEIGHT = 8;
