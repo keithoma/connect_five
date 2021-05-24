@@ -42,11 +42,13 @@ class Board {
     State check_for_win() const;
 
     void add_and_animate(int _column, State _state);
-
+	int number_of_empty_in_column(int _column) const;
 
   private:
     unsigned short int width;
     unsigned short int height;
+
+
 
     State check_vector(vector<State>);
 };
@@ -117,15 +119,36 @@ State to_state(Player _player) {
 	throw std::invalid_argument("Player");
 }
 
+int Board::number_of_empty_in_column(int _column) const {
+	int number_of_empty = 0;
+	for (int row = 0; row < height; ++row) {
+		if (at(_column, row) == State::empty) {
+			++number_of_empty;
+		}
+	}
+	return number_of_empty;
+}
+
 Board player_turn(Board board, Player _player) {
     board.print_board();
     cout << "\n";
     cout << "It's " << to_string(_player) << "'s player's turn. On which row do you want to put a stone?" << endl;
 
-    int row;
-    cin >> row;
+    int column;
+    cin >> column;
 
-    board.add_and_animate(row - 1, to_state(_player));
+	while (cin.fail() || column < 1 || column > 12 || board.number_of_empty_in_column(column) == 0) {
+		if (board.number_of_empty_in_column(column) == 0) {
+			cout << "That column is already full! Please enter another number!";
+		} else {
+			cout << "Please enter a valid integer between 1 and 12!\n";
+		}
+		cin.clear();
+		cin.ignore(256, '\n');
+		cin >> column;
+	}
+
+    board.add_and_animate(column - 1, to_state(_player));
     board.print_board();
 
     return board;
